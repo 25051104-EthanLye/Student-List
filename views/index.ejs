@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student List App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #ffffff;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            text-align: center;
+        }
+
+        h1 {
+            font-weight: normal;
+            font-size: 28px;
+            margin-bottom: 30px;
+            color: #222;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: center;
+            border-bottom: 1px solid #eaeaea; /* Light gray lines between rows */
+        }
+
+        th {
+            font-weight: bold;
+            color: #000;
+        }
+
+        /* Styling for the student name links */
+        td a {
+            color: #0d6efd; /* Standard web blue link */
+            text-decoration: none;
+        }
+
+        td a:hover {
+            text-decoration: underline;
+        }
+
+        /* Styling for the small images */
+        .profile-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 4px;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+    
+    <%- include('navbar') %>
+    
+    <div class="container">
+        <h1>Students from Student List App Database</h1>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Student Name</th>
+                    <th>Student Image</th>
+                    <th>Dob</th>
+                    <th>Contact</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if (student && student.length > 0) { %>
+                    <% student.forEach(function(s) { %>
+                        <tr>
+                            <td><a href="/student/<%= s.studentId %>"><%= s.name %></a></td>
+                            
+                            <td><img src="<%= s.image %>" alt="<%= s.name %>" class="profile-img"></td>
+                            
+                            <td><%= s.dob %></td>
+                            
+                            <td><%= s.contact %></td>
+                        </tr>
+                    <% }); %>
+                <% } else { %>
+                    <tr>
+                        <td colspan="4">No students found.</td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+
+</body>
+</html>

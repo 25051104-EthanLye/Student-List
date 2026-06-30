@@ -1,0 +1,17 @@
+<%- include('navbar') %>
+
+<% if (student && student.length > 0) { %>
+    <% student.forEach(function(s) { %>
+        <div>
+            <p><b>Student Name:</b><br> <%= s.name %></p>
+            
+            <p><b>Student Image:</b><br> <img src="<%= s.image %>" width="20%" alt="<%= s.name %>"></p>
+            
+            <p><b>D.o.B:</b><br> <%= s.dob %></p>
+            
+            <p><b>Contact:</b><br> <%= s.contact %></p>
+        </div>
+        <hr> <% }); %>
+<% } else { %>
+    <p>No students found.</p>
+<% } %>
