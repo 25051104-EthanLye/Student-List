@@ -7,7 +7,7 @@
 </head>
 <body>
     <h1>Update Student</h1>
-    <form action="/updateStudent/<%= student.studentId %>" method="POST">
+    <form action="/updateStudent/<%= student.studentId %>" method="POST" enctype="multipart/form-data">
         <label for="name">Name:</label>
         <input type="text" id="name" name="name" value="<%= student.name %>" required><br><br>
 
@@ -17,6 +17,9 @@
         <label for="major">Major:</label>
         <input type="text" id="major" name="major" value="<%= student.major %>" required><br><br>
 
+        <label for="image">Profile Image:</label>
+        <input type="file" id="image" name="image" accept="image/*"><br><br>
+        
         <button type="submit">Update Student</button>
     </form>
 </body>
