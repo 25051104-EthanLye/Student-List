@@ -5,60 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student List App</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #ffffff;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 40px auto;
-            text-align: center;
-        }
-
-        h1 {
-            font-weight: normal;
-            font-size: 28px;
-            margin-bottom: 30px;
-            color: #222;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        th, td {
-            padding: 15px;
-            text-align: center;
-            border-bottom: 1px solid #eaeaea; /* Light gray lines between rows */
-        }
-
-        th {
-            font-weight: bold;
-            color: #000;
-        }
-
-        /* Styling for the student name links */
-        td a {
-            color: #0d6efd; /* Standard web blue link */
-            text-decoration: none;
-        }
-
-        td a:hover {
-            text-decoration: underline;
-        }
-
-        /* Styling for the small images */
-        .profile-img {
-            width: 40px;
-            height: 40px;
-            border-radius: 4px;
-            object-fit: cover;
-        }
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #ffffff; }
+        .container { max-width: 800px; margin: 40px auto; text-align: center; }
+        h1 { font-weight: normal; font-size: 28px; margin-bottom: 30px; color: #222; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 15px; text-align: center; border-bottom: 1px solid #eaeaea; }
+        th { font-weight: bold; color: #000; }
+        td a { color: #0d6efd; text-decoration: none; }
+        td a:hover { text-decoration: underline; }
+        .profile-img { width: 40px; height: 40px; border-radius: 4px; object-fit: cover; }
+        .btn { padding: 4px 8px; border-radius: 4px; text-decoration: none; font-size: 14px; margin: 0 2px; }
+        .btn-outline-warning { color: #ffc107; border: 1px solid #ffc107; }
+        .btn-outline-warning:hover { background-color: #ffc107; color: black; }
+        .btn-outline-danger { color: #dc3545; border: 1px solid #dc3545; }
+        .btn-outline-danger:hover { background-color: #dc3545; color: white; }
     </style>
 </head>
 <body>
@@ -75,29 +35,34 @@
                     <th>Student Image</th>
                     <th>Dob</th>
                     <th>Contact</th>
+                    <th>Actions</th> 
                 </tr>
             </thead>
             <tbody>
-                <% if (student && student.length > 0) { %>
-                    <% student.forEach(function(s) { %>
+                <% if (typeof students !== 'undefined' && students.length > 0) { %>
+                    <% students.forEach(function(s) { %>
                         <tr>
-                            <td><a href="/student/<%= s.studentId %>"><%= s.name %></a></td>
-                            
-                            <td><img src="<%= s.image %>" alt="<%= s.name %>" class="profile-img"></td>
-                            
+                            <td><a href="/student/<%= s.studentId %>"><%= s.studentName %></a></td>
+                            <td><img src="<%= s.image %>" alt="<%= s.studentName %>" class="profile-img"></td>
                             <td><%= s.dob %></td>
-                            
-                            <td><%= s.contact %></td>
+                            <td><%= s.contactNumber %></td>
+                            <td>
+                                <a href="/updateStudent/<%= s.studentId %>" class="btn btn-outline-warning">Edit</a>
+                                <a href="/deleteStudent/<%= s.studentId %>" 
+                                   class="btn btn-outline-danger"
+                                   onclick="return confirm('Are you sure you want to delete this student?')">
+                                    Delete
+                                </a>
+                            </td>
                         </tr>
                     <% }); %>
                 <% } else { %>
                     <tr>
-                        <td colspan="4">No students found.</td>
+                        <td colspan="5">No students found.</td>
                     </tr>
                 <% } %>
             </tbody>
         </table>
     </div>
-
 </body>
 </html>

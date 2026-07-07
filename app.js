@@ -26,32 +26,91 @@ app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true})); 
 
 // Define routes 
-// Example: 
 app.get('/', (req, res) => { 
     connection.query('SELECT * FROM student', (error, results) => { 
       if (error) throw error; 
-      res.render('index', { student: results }); // Render HTML page with data 
+      // Fixed: Variable key named 'students' to match index.ejs template
+      res.render('index', { students: results }); 
     }); 
 }); 
 
 app.get('/student/:studentId', (req, res) => {
-  // Extract the student ID from the request parameters
   const studentId = req.params.studentId;
   const sql = 'SELECT * FROM student WHERE studentId = ?';
-  // Fetch data from MySQL based on the student ID
-  connection.query( sql , [studentId], (error, results) => {
+
+  connection.query(sql, [studentId], (error, results) => {
     if (error) {
       console.error('Database query error:', error.message); 
       return res.send('Error Retrieving student by ID'); 
     }
-    // Check if any student with the given ID was found
     if (results.length > 0) {
-      // Render HTML page with the student data
       res.render('student', { student: results[0] });
     } else {
-      // If no student with the given ID was found
       res.send('Student not found');
     }
+  });
+});
+
+app.get('/addstudent', (req, res) => {
+  res.render('addStudent'); // Explicitly matches addStudent.ejs
+});
+
+app.post('/addstudent', (req, res) => {
+  // Fixed: Map parameter names to match input 'name' attributes from addStudent.ejs
+  const { studentName, dob, contact, image } = req.body; 
+  const sql = 'INSERT INTO student (studentName, dob, contactNumber, image) VALUES (?, ?, ?, ?)';
+
+  connection.query(sql, [studentName, dob, contact, image], (error, results) => {
+    if (error) {
+      console.error('Database insert error:', error.message);
+      return res.send('Error adding student');
+    }
+    res.redirect('/');
+  });
+});
+
+// Fixed: Aligned endpoint naming from /delete-student to match index.ejs link format (/deleteStudent/:id)
+app.get('/deleteStudent/:studentId', (req, res) => {
+  const studentId = req.params.studentId;
+  const sql = 'DELETE FROM student WHERE studentId = ?';
+
+  connection.query(sql, [studentId], (error, results) => {
+    if (error) {
+      console.error('Database delete error:', error.message);
+      return res.send('Error deleting student');
+    }
+    res.redirect('/');
+  });
+});
+
+app.get('/updateStudent/:studentId', (req, res) => {
+  const studentId = req.params.studentId;
+  const sql = 'SELECT * FROM student WHERE studentId = ?';
+
+  connection.query(sql, [studentId], (error, results) => {
+    if (error) {
+      console.error('Database query error:', error.message);
+      return res.send('Error retrieving student for update');
+    }
+    if (results.length > 0) {
+      res.render('updateStudent', { student: results[0] }); // Render explicit file updateStudent.ejs
+    } else {
+      res.send('Student not found');
+    }
+  });
+});
+
+app.post('/updateStudent/:studentId', (req, res) => {
+  const studentId = req.params.studentId;
+  const { studentName, dob, contactNumber, image } = req.body; 
+  const sql = 'UPDATE student SET studentName = ?, dob = ?, contactNumber = ?, image = ? WHERE studentId = ?';
+
+  connection.query(sql, [studentName, dob, contactNumber, image, studentId], (error, results) => {
+    if (error) {
+      console.error('Database update error:', error.message);
+      return res.send('Error updating student');
+    }
+    res.redirect('/');
   });
 });
 
